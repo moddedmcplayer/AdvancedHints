@@ -10,6 +10,7 @@ namespace AdvancedHints
     using System;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using HarmonyLib;
 
     /// <summary>
     /// The main plugin class.
@@ -17,6 +18,7 @@ namespace AdvancedHints
     public class Plugin : Plugin<Config>
     {
         private EventHandlers eventHandlers;
+        private Harmony harmony;
 
         /// <inheritdoc />
         public override string Author { get; } = "Build";
@@ -39,6 +41,9 @@ namespace AdvancedHints
         /// <inheritdoc />
         public override void OnEnabled()
         {
+            harmony = new Harmony($"advancedHints.{DateTime.UtcNow.Ticks}");
+            harmony.PatchAll();
+
             eventHandlers = new EventHandlers();
             Exiled.Events.Handlers.Player.Destroying += eventHandlers.OnDestroying;
             Exiled.Events.Handlers.Player.Verified += eventHandlers.OnVerified;
@@ -51,6 +56,9 @@ namespace AdvancedHints
             Exiled.Events.Handlers.Player.Destroying -= eventHandlers.OnDestroying;
             Exiled.Events.Handlers.Player.Verified -= eventHandlers.OnVerified;
             eventHandlers = null;
+
+            harmony.UnpatchAll();
+            harmony = null;
             base.OnDisabled();
         }
     }

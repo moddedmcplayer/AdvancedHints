@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="EXILED" Version="4.1.2" />
+    <PackageReference Include="Lib.Harmony" Version="2.0.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
 
@@ -20,7 +21,7 @@
     <Reference Include="Assembly-CSharp" HintPath="$(EXILED_References)\Assembly-CSharp-Publicized.dll" Private="false" />
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_References)\Assembly-CSharp-firstpass.dll" Private="false" />
     <Reference Include="CommandSystem.Core" HintPath="$(EXILED_References)\CommandSystem.Core.dll" Private="false" />
-    <Reference Include="Mirror" HintPath="$(EXILED_References)\Mirror-Publicized.dll" Private="false" />
+    <Reference Include="Mirror" HintPath="$(EXILED_References)\Mirror.dll" Private="false" />
     <Reference Include="NorthwoodLib" HintPath="$(EXILED_References)\NorthwoodLib.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_References)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="UnityEngine.AudioModule" HintPath="$(EXILED_References)\UnityEngine.AudioModule.dll" Private="false" />
@@ -28,4 +29,3 @@
   </ItemGroup>
 
 </Project>
-
