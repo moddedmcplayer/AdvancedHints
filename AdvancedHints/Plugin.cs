@@ -33,7 +33,7 @@ namespace AdvancedHints
         public override PluginPriority Priority { get; } = PluginPriority.Higher;
 
         /// <inheritdoc />
-        public override Version RequiredExiledVersion { get; } = new Version(4, 1, 2);
+        public override Version RequiredExiledVersion { get; } = new Version(4, 1, 7);
 
         /// <inheritdoc />
         public override Version Version { get; } = new Version(1, 0, 0);
