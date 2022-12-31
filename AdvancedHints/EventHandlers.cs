@@ -8,7 +8,7 @@
 namespace AdvancedHints
 {
     using AdvancedHints.Components;
-    using Exiled.Events.EventArgs;
+    using Exiled.Events.EventArgs.Player;
 
     /// <summary>
     /// Handles events derived from <see cref="Exiled.Events.Handlers"/>.
