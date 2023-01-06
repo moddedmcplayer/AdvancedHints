@@ -16,7 +16,7 @@ namespace AdvancedHints.Patches
     /// <summary>
     /// Hijacks <see cref="Player.ShowHint"/> and directs it towards <see cref="ShowHint"/>.
     /// </summary>
-    [HarmonyPatch(typeof(Player), nameof(Player.ShowHint))]
+    [HarmonyPatch(typeof(Player), nameof(Player.ShowHint), typeof(string), typeof(float))]
     internal static class ShowHint
     {
         private static bool Prefix(Player __instance, string message, float duration = 3f)
