@@ -1,5 +1,5 @@
 name: AdvancedHints CI
-on: [push, pull_request]
+on: [push, workflow_dispatch]
 
 jobs:
   build:
