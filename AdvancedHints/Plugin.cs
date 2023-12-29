@@ -27,7 +27,7 @@ namespace AdvancedHints
         public static Plugin Singleton { get; private set; }
 
         /// <inheritdoc />
-        public override string Author { get; } = "Build";
+        public override string Author { get; } = "Build, moddedmcplayer";
 
         /// <inheritdoc />
         public override string Name { get; } = "AdvancedHints";
@@ -42,7 +42,7 @@ namespace AdvancedHints
         public override Version RequiredExiledVersion { get; } = new Version(8, 0, 0);
 
         /// <inheritdoc />
-        public override Version Version { get; } = new Version(1, 0, 0);
+        public override Version Version { get; } = new Version(2, 0, 0);
 
         /// <inheritdoc />
         public override void OnEnabled()
@@ -52,7 +52,6 @@ namespace AdvancedHints
             harmony.PatchAll();
 
             eventHandlers = new EventHandlers();
-            Exiled.Events.Handlers.Player.Destroying += eventHandlers.OnDestroying;
             Exiled.Events.Handlers.Player.Verified += eventHandlers.OnVerified;
             base.OnEnabled();
         }
@@ -60,7 +59,6 @@ namespace AdvancedHints
         /// <inheritdoc />
         public override void OnDisabled()
         {
-            Exiled.Events.Handlers.Player.Destroying -= eventHandlers.OnDestroying;
             Exiled.Events.Handlers.Player.Verified -= eventHandlers.OnVerified;
             eventHandlers = null;
 

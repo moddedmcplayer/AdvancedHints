@@ -27,6 +27,9 @@ namespace AdvancedHints
         [Description("The refresh rate of the hint display, in seconds per refresh.")]
         public float RefreshRate { get; set; } = 1f;
 
+        [Description("The duration of a single hint, in seconds.")]
+        public float HintDuration { get; set; } = 2f;
+
         [Description("Whether or not to enable plugin overrides (see below).")]
         public bool EnablePluginOverrides { get; set; } = true;
 
@@ -41,5 +44,9 @@ namespace AdvancedHints
         {
             { "AdvancedHints", DisplayLocation.MiddleBottom },
         };
+
+        [Description("The template for the hint display.")]
+        public string HudTemplate { get; set; } =
+            "\"<line-height=95%><voffset=8.5em><alpha=#ff>\\n\\n\\n<align=center>{0}{1}{2}{3}{4}</align>\"";
     }
 }

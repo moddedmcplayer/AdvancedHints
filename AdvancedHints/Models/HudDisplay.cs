@@ -26,7 +26,7 @@ namespace AdvancedHints.Models
         /// </summary>
         public HudDisplay()
         {
-            coroutineHandle = Timing.RunCoroutine(HandleDequeue());
+            coroutineHandle = Timing.RunCoroutine(HandleDequeue(), Segment.FixedUpdate);
         }
 
         /// <summary>

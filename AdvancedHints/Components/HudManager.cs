@@ -20,7 +20,6 @@ namespace AdvancedHints.Components
     /// </summary>
     public class HudManager : MonoBehaviour
     {
-        private const string HudTemplate = "<line-height=95%><voffset=8.5em><alpha=#ff>\n\n\n<align=center>{0}{1}{2}{3}{4}</align>";
         private object[] toFormat;
         private Player player;
         private float globalTimer;
@@ -70,11 +69,6 @@ namespace AdvancedHints.Components
             }
         }
 
-        /// <summary>
-        /// Destroys this <see cref="HudManager"/> instance.
-        /// </summary>
-        public void Destroy() => Destroy(this);
-
         private void Start()
         {
             player = Player.Get(gameObject);
@@ -102,13 +96,9 @@ namespace AdvancedHints.Components
         private void UpdateHints()
         {
             toFormat = Displays.Values.Select(display => FormatStringForHud(display.Content ?? string.Empty, 6)).ToArray<object>();
-            hint = string.Format(HudTemplate, toFormat);
-            HintParameter[] parameters =
-            {
-                new StringHintParameter(hint),
-            };
+            hint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
 
-            player.HintDisplay.Show(new TextHint(hint, parameters, durationScalar: 2));
+            player.ShowHint(hint, Plugin.Singleton.Config.HintDuration);
         }
 
         private string FormatStringForHud(string text, int needNewLine)
