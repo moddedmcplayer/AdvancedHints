@@ -8,6 +8,7 @@
 namespace AdvancedHints
 {
     using System;
+    using AdvancedHints.Components;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;
@@ -19,6 +20,11 @@ namespace AdvancedHints
     {
         private EventHandlers eventHandlers;
         private Harmony harmony;
+
+        /// <summary>
+        /// Gets the instance of the plugin.
+        /// </summary>
+        public static Plugin Singleton { get; private set; }
 
         /// <inheritdoc />
         public override string Author { get; } = "Build";
@@ -41,6 +47,7 @@ namespace AdvancedHints
         /// <inheritdoc />
         public override void OnEnabled()
         {
+            Singleton = this;
             harmony = new Harmony($"advancedHints.{DateTime.UtcNow.Ticks}");
             harmony.PatchAll();
 
@@ -57,9 +64,17 @@ namespace AdvancedHints
             Exiled.Events.Handlers.Player.Verified -= eventHandlers.OnVerified;
             eventHandlers = null;
 
-            harmony.UnpatchAll();
+            harmony.UnpatchAll(harmony.Id);
             harmony = null;
+            Singleton = null;
             base.OnDisabled();
+        }
+
+        /// <inheritdoc />
+        public override void OnReloaded()
+        {
+            foreach (var kvp in HudManager.Instances)
+                kvp.Value.LoadConfig();
         }
     }
 }

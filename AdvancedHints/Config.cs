@@ -5,8 +5,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable SA1600 // Elements should be documented
+
 namespace AdvancedHints
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using AdvancedHints.Enums;
     using Exiled.API.Interfaces;
 
     /// <inheritdoc />
@@ -15,6 +21,25 @@ namespace AdvancedHints
         /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
 
-        public bool Debug { get; set; }
+        /// <inheritdoc />
+        public bool Debug { get; set; } = false;
+
+        [Description("The refresh rate of the hint display, in seconds per refresh.")]
+        public float RefreshRate { get; set; } = 1f;
+
+        [Description("Whether or not to enable plugin overrides (see below).")]
+        public bool EnablePluginOverrides { get; set; } = true;
+
+        // ReSharper disable once CollectionNeverUpdated.Global
+        [Description("Messages that will appear if nothing else is quened for the display.")]
+        public Dictionary<DisplayLocation, string> DefaultMessages { get; set; } = new ()
+        {
+        };
+
+        [Description("Plugin overrides for specific hint positions.")]
+        public Dictionary<string, DisplayLocation> PluginOverrides { get; set; } = new ()
+        {
+            { "AdvancedHints", DisplayLocation.MiddleBottom },
+        };
     }
 }

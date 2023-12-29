@@ -59,6 +59,18 @@ namespace AdvancedHints.Components
         }
 
         /// <summary>
+        /// Loads the configs default messages.
+        /// </summary>
+        public void LoadConfig()
+        {
+            foreach (var kvp in Displays)
+            {
+                if (Plugin.Singleton.Config.DefaultMessages.TryGetValue(kvp.Key, out var defaultText))
+                    kvp.Value.DefaultText = defaultText;
+            }
+        }
+
+        /// <summary>
         /// Destroys this <see cref="HudManager"/> instance.
         /// </summary>
         public void Destroy() => Destroy(this);
@@ -67,12 +79,13 @@ namespace AdvancedHints.Components
         {
             player = Player.Get(gameObject);
             Instances.Add(player, this);
+            LoadConfig();
         }
 
         private void FixedUpdate()
         {
-            globalTimer += Time.deltaTime;
-            if (globalTimer > 1f)
+            globalTimer += Time.fixedDeltaTime;
+            if (globalTimer > Plugin.Singleton.Config.RefreshRate)
             {
                 UpdateHints();
                 globalTimer = 0;

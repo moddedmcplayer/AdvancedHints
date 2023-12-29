@@ -18,6 +18,7 @@ namespace AdvancedHints.Models
     {
         private readonly Queue<Hint> queue = new Queue<Hint>();
         private readonly CoroutineHandle coroutineHandle;
+        private string defaultText = string.Empty;
         private bool breakNextFrame;
 
         /// <summary>
@@ -26,6 +27,15 @@ namespace AdvancedHints.Models
         public HudDisplay()
         {
             coroutineHandle = Timing.RunCoroutine(HandleDequeue());
+        }
+
+        /// <summary>
+        /// Gets or sets the default text to be displayed.
+        /// </summary>
+        public string DefaultText
+        {
+            get => defaultText;
+            set => defaultText = value ?? string.Empty;
         }
 
         /// <summary>
@@ -78,7 +88,7 @@ namespace AdvancedHints.Models
                         yield return Timing.WaitForOneFrame;
                     }
 
-                    Content = string.Empty;
+                    Content = DefaultText;
                     continue;
                 }
 
