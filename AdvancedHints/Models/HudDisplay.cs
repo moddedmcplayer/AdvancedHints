@@ -35,7 +35,12 @@ namespace AdvancedHints.Models
         public string DefaultText
         {
             get => defaultText;
-            set => defaultText = value ?? string.Empty;
+            set
+            {
+                defaultText = value ?? string.Empty;
+                if (string.IsNullOrEmpty(Content))
+                    Content = defaultText;
+            }
         }
 
         /// <summary>

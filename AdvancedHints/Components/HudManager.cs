@@ -8,6 +8,7 @@
 namespace AdvancedHints.Components
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using AdvancedHints.Enums;
     using AdvancedHints.Models;
@@ -95,10 +96,10 @@ namespace AdvancedHints.Components
 
         private void UpdateHints()
         {
-            toFormat = Displays.Values.Select(display => FormatStringForHud(display.Content ?? string.Empty, 6)).ToArray<object>();
+            toFormat = Displays.Values.Select(display => FormatStringForHud(display.Content ?? string.Empty, Plugin.Singleton.Config.LinesPerPosition)).ToArray<object>();
             hint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
 
-            player.ShowHint(hint, Plugin.Singleton.Config.HintDuration);
+            player.ShowHint(Plugin.HintPrefix + hint, Plugin.Singleton.Config.HintDuration);
         }
 
         private string FormatStringForHud(string text, int needNewLine)

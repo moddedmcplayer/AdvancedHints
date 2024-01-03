@@ -30,14 +30,23 @@ namespace AdvancedHints
         [Description("The duration of a single hint, in seconds.")]
         public float HintDuration { get; set; } = 2f;
 
-        [Description("Whether or not to enable plugin overrides (see below).")]
-        public bool EnablePluginOverrides { get; set; } = true;
-
         // ReSharper disable once CollectionNeverUpdated.Global
         [Description("Messages that will appear if nothing else is quened for the display.")]
         public Dictionary<DisplayLocation, string> DefaultMessages { get; set; } = new ()
         {
         };
+
+        [Description("Whether or not to enable message overrides (see below).")]
+        public bool EnableMessageStartsWithOverrides { get; set; } = true;
+
+        [Description("Message overrides for specific hint positions.")]
+        public Dictionary<string, DisplayLocation> MessageStartsWithOverrides { get; set; } = new ()
+        {
+            { "You will respawn in", DisplayLocation.Middle },
+        };
+
+        [Description("Whether or not to enable plugin overrides (see below).")]
+        public bool EnablePluginOverrides { get; set; } = true;
 
         [Description("Plugin overrides for specific hint positions.")]
         public Dictionary<string, DisplayLocation> PluginOverrides { get; set; } = new ()
@@ -47,6 +56,9 @@ namespace AdvancedHints
 
         [Description("The template for the hint display.")]
         public string HudTemplate { get; set; } =
-            "\"<line-height=95%><voffset=8.5em><alpha=#ff>\\n\\n\\n<align=center>{0}{1}{2}{3}{4}</align>\"";
+            "<line-height=95%><voffset=8.5em><alpha=#ff>\\n\\n\\n<align=center>{0}{1}{2}{3}{4}</align>";
+
+        [Description("Newlines per position, edit with template.")]
+        public int LinesPerPosition { get; set; } = 6;
     }
 }

@@ -17,20 +17,32 @@ namespace AdvancedHints.Patches
     using HarmonyLib;
 
     /// <summary>
-    /// Hijacks <see cref="Player.ShowHint"/> and directs it towards <see cref="ShowHint"/>.
+    /// Hijacks <see cref="Player.ShowHint(string, float)"/> and directs it towards <see cref="ShowHint"/>.
     /// </summary>
     [HarmonyPatch(typeof(Player), nameof(Player.ShowHint), typeof(string), typeof(float))]
     internal static class ShowHint
     {
-        private static bool Prefix(Player __instance, string message, float duration = 3f)
+        private static bool Prefix(Player __instance, ref string message, float duration = 3f)
         {
-            if (message.Contains("You will respawn in"))
+            if (message.StartsWith(Plugin.HintPrefix))
             {
-                HudManager.ShowHint(__instance, "\n" + message, duration, displayLocation: DisplayLocation.Middle);
-                return false;
+                message = message.Substring(Plugin.HintPrefix.Length);
+                return true;
             }
 
             DisplayLocation displayLocation = DisplayLocation.MiddleBottom;
+
+            if (Plugin.Singleton.Config.EnableMessageStartsWithOverrides)
+            {
+                foreach (var kvp in Plugin.Singleton.Config.MessageStartsWithOverrides)
+                {
+                    if (message.Contains(kvp.Key))
+                    {
+                        displayLocation = kvp.Value;
+                        break;
+                    }
+                }
+            }
 
             if (Plugin.Singleton.Config.EnablePluginOverrides)
             {

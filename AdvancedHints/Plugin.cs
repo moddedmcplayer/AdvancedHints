@@ -18,6 +18,10 @@ namespace AdvancedHints
     /// </summary>
     public class Plugin : Plugin<Config>
     {
+        /// <summary>
+        /// The prefix that makes the patch ignore the hint.
+        /// </summary>
+        public const string HintPrefix = "ADVHINTS";
         private EventHandlers eventHandlers;
         private Harmony harmony;
 
