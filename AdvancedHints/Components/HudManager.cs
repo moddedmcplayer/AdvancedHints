@@ -7,6 +7,7 @@
 
 namespace AdvancedHints.Components
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -27,9 +28,31 @@ namespace AdvancedHints.Components
         private string hint;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HudManager"/> class. - blablabal
+        /// Why are you running this, idiot?
+        /// Let unity handle it
+        /// </summary>
+        public HudManager()
+        {
+            try
+            {
+                HudManagerInitialized(this);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"An error occurred while running {nameof(HudManagerInitialized)}: {e}");
+            }
+        }
+
+        /// <summary>
         /// Gets all instance of the <see cref="HudManager"/> component.
         /// </summary>
         public static Dictionary<Player, HudManager> Instances { get; } = new Dictionary<Player, HudManager>();
+
+        /// <summary>
+        /// Gets or sets a delegate that is called when a <see cref="HudManager"/> is initialized.
+        /// </summary>
+        public static Action<HudManager> HudManagerInitialized { get; set; } = _ => { };
 
         /// <summary>
         /// Gets all attached <see cref="HudDisplay"/> instances.
