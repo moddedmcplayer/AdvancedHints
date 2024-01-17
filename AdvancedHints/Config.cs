@@ -36,6 +36,9 @@ namespace AdvancedHints
         {
         };
 
+        [Description("Whether or not plugins that specifically set the default message will override the one specified in the config.")]
+        public bool PluginsCanOverrideDefaultMessages { get; set; } = true;
+
         [Description("Whether or not to enable message overrides (see below).")]
         public bool EnableMessageStartsWithOverrides { get; set; } = true;
 

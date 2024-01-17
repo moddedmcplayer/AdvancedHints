@@ -7,8 +7,11 @@
 
 namespace AdvancedHints.Models
 {
+    using System;
     using System.Collections.Generic;
     using AdvancedHints.Components;
+    using Exiled.API.Features;
+    using JetBrains.Annotations;
     using MEC;
 
     /// <summary>
@@ -16,6 +19,13 @@ namespace AdvancedHints.Models
     /// </summary>
     public class HudDisplay
     {
+        /// <summary>
+        /// Gets or sets a <see cref="Func"/> that returns the default text to be displayed.
+        /// May or may not override the one from the Config.
+        /// </summary>
+        [CanBeNull]
+        public Func<string> GetDefaultText { get; set; }
+
         private readonly Queue<Hint> queue = new Queue<Hint>();
         private readonly CoroutineHandle coroutineHandle;
         private string defaultText = string.Empty;
@@ -34,18 +44,38 @@ namespace AdvancedHints.Models
         /// </summary>
         public string DefaultText
         {
-            get => defaultText;
-            set
+            get
             {
-                defaultText = value ?? string.Empty;
-                if (string.IsNullOrEmpty(Content))
-                    Content = defaultText;
+                if (GetDefaultText != null
+                    && (string.IsNullOrEmpty(defaultText)
+                        || Plugin.Singleton.Config.PluginsCanOverrideDefaultMessages))
+                {
+                    string text;
+
+                    try
+                    {
+                        text = GetDefaultText();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"An error occurred while running {nameof(GetDefaultText)}: {e}");
+                        return defaultText;
+                    }
+
+                    if (text != null)
+                        return text;
+                }
+
+                return defaultText;
             }
+
+            set => defaultText = value ?? string.Empty;
         }
 
         /// <summary>
         /// Gets or sets the content to be displayed.
         /// </summary>
+        [CanBeNull]
         public string Content { get; set; }
 
         /// <summary>
@@ -93,7 +123,7 @@ namespace AdvancedHints.Models
                         yield return Timing.WaitForOneFrame;
                     }
 
-                    Content = DefaultText;
+                    Content = null;
                     continue;
                 }
 

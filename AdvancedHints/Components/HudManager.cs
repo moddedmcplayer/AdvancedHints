@@ -96,7 +96,9 @@ namespace AdvancedHints.Components
 
         private void UpdateHints()
         {
-            toFormat = Displays.Values.Select(display => FormatStringForHud(display.Content ?? string.Empty, Plugin.Singleton.Config.LinesPerPosition)).ToArray<object>();
+            toFormat = Displays.Values.Select(display => FormatStringForHud(
+                display.Content ?? display.DefaultText, Plugin.Singleton.Config.LinesPerPosition))
+                .ToArray<object>();
             hint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
 
             player.ShowHint(Plugin.HintPrefix + hint, Plugin.Singleton.Config.HintDuration);
