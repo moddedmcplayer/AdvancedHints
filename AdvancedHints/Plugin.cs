@@ -46,7 +46,7 @@ namespace AdvancedHints
         public override Version RequiredExiledVersion { get; } = new Version(8, 0, 0);
 
         /// <inheritdoc />
-        public override Version Version { get; } = new Version(2, 0, 0);
+        public override Version Version { get; } = new Version(2, 1, 0);
 
         /// <inheritdoc />
         public override void OnEnabled()
