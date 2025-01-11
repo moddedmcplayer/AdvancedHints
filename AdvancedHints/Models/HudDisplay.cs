@@ -20,7 +20,7 @@ namespace AdvancedHints.Models
     public class HudDisplay
     {
         /// <summary>
-        /// Gets or sets a <see cref="Func"/> that returns the default text to be displayed.
+        /// Gets or sets a Func that returns the default text to be displayed.
         /// May or may not override the one from the Config.
         /// </summary>
         [CanBeNull]
