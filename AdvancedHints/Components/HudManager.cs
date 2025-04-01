@@ -9,12 +9,10 @@ namespace AdvancedHints.Components
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using AdvancedHints.Enums;
     using AdvancedHints.Models;
     using Exiled.API.Features;
-    using Hints;
     using UnityEngine;
 
     /// <summary>
@@ -66,6 +64,11 @@ namespace AdvancedHints.Components
                 [DisplayLocation.MiddleBottom] = new HudDisplay(),
                 [DisplayLocation.Bottom] = new HudDisplay(),
             };
+
+        /// <summary>
+        /// Gets or sets a value indicating whether debug mode is enabled.
+        /// </summary>
+        public bool Debug { get; set; } = false;
 
         /// <summary>
         /// Displays a hint to a player.
@@ -122,7 +125,11 @@ namespace AdvancedHints.Components
             toFormat = Displays.Values.Select(display => FormatStringForHud(
                 display.Content ?? display.DefaultText, Plugin.Singleton.Config.LinesPerPosition))
                 .ToArray<object>();
-            hint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
+
+            string newHint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
+            if (Debug && newHint != hint)
+                player.SendConsoleMessage(newHint, "white");
+            hint = newHint;
 
             player.ShowHint(Plugin.HintPrefix + hint, Plugin.Singleton.Config.HintDuration);
         }
