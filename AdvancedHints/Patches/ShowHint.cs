@@ -10,26 +10,44 @@ namespace AdvancedHints.Patches
 #pragma warning disable SA1313
     using System;
     using System.Linq;
+    using System.Reflection;
     using AdvancedHints.Components;
     using AdvancedHints.Enums;
     using Exiled.API.Features;
     using Exiled.Loader;
     using HarmonyLib;
+    using Hints;
+    using Hint = Hints.Hint;
 
     /// <summary>
-    /// Hijacks <see cref="Player.ShowHint(string, float)"/> and directs it towards <see cref="ShowHint"/>.
+    /// Hijacks <see cref="HintDisplay.Show"/> and directs it towards <see cref="ShowHint"/>.
     /// </summary>
-    [HarmonyPatch(typeof(Player), nameof(Player.ShowHint), typeof(string), typeof(float))]
+    [HarmonyPatch(typeof(HintDisplay), nameof(HintDisplay.Show))]
     internal static class ShowHint
     {
-        private static bool Prefix(Player __instance, ref string message, float duration = 3f)
+        private static bool Prefix(HintDisplay __instance, Hint hint)
         {
-            if (message.StartsWith(Plugin.HintPrefix))
+            if (hint is not TextHint textHint || !Player.TryGet(__instance.gameObject, out Player player))
+                return true;
+
+            if (textHint.Text.StartsWith(Plugin.HintPrefixSkip))
             {
-                message = message.Substring(Plugin.HintPrefix.Length);
+                textHint.Text = textHint.Text.Substring(Plugin.HintPrefixSkip.Length);
+                if (textHint.Parameters.ElementAtOrDefault(0) is StringHintParameter stringHintParameter)
+                {
+                    if (stringHintParameter.Value.StartsWith(Plugin.HintPrefixSkip))
+                        stringHintParameter.Value = stringHintParameter.Value.Substring(Plugin.HintPrefixSkip.Length); // idk if this is necessary
+                }
+
                 return true;
             }
 
+            ProcessHint(player, textHint.Text, textHint.DurationScalar);
+            return false;
+        }
+
+        private static void ProcessHint(Player player, string message, float duration)
+        {
             DisplayLocation displayLocation = DisplayLocation.MiddleBottom;
 
             if (Plugin.Singleton.Config.EnableMessageStartsWithOverrides)
@@ -51,7 +69,7 @@ namespace AdvancedHints.Patches
                     var stackTrace = new System.Diagnostics.StackTrace();
                     if (stackTrace.FrameCount >= 3)
                     {
-                        var caller = stackTrace.GetFrame(2).GetMethod().DeclaringType?.Assembly;
+                        Assembly caller = stackTrace.GetFrame(2).GetMethod().DeclaringType?.Assembly;
                         if (caller != null)
                         {
                             var plugin = Loader.Plugins.FirstOrDefault(x => x?.Assembly == caller);
@@ -71,12 +89,11 @@ namespace AdvancedHints.Patches
                 }
                 catch (Exception e)
                 {
-                    Log.Debug("Patch override: " + e.GetType());
+                    Log.Debug("Patch override error: " + e.GetType());
                 }
             }
 
-            HudManager.ShowHint(__instance, message, duration, true, displayLocation);
-            return false;
+            HudManager.ShowHint(player, message, duration, true, displayLocation);
         }
     }
 }

@@ -128,14 +128,24 @@ namespace AdvancedHints.Components
 
             string newHint = string.Format(Plugin.Singleton.Config.HudTemplate, toFormat);
             if (Debug && newHint != hint)
-                player.SendConsoleMessage(newHint, "white");
+                player.SendConsoleMessage(CleanseString(newHint), "white");
             hint = newHint;
 
-            player.ShowHint(Plugin.HintPrefix + hint, Plugin.Singleton.Config.HintDuration);
+            player.ShowHint(Plugin.HintPrefixSkip + hint, Plugin.Singleton.Config.HintDuration);
+        }
+
+        private string CleanseString(string text)
+        {
+            return text.Replace("\n", "nl")
+                .Replace('<', '[')
+                .Replace('>', ']');
         }
 
         private string FormatStringForHud(string text, int needNewLine)
         {
+            if (text.StartsWith(Plugin.HintPrefixNoFormat))
+                return text.Substring(Plugin.HintPrefixNoFormat.Length);
+
             int curNewLine = text.Count(x => x == '\n');
             for (int i = 0; i < needNewLine - curNewLine; i++)
                 text += '\n';

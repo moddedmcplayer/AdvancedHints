@@ -21,7 +21,13 @@ namespace AdvancedHints
         /// <summary>
         /// The prefix that makes the patch ignore the hint.
         /// </summary>
-        public const string HintPrefix = "ADVHINTS";
+        public const string HintPrefixSkip = "ADVHINTSIGNORE";
+
+        /// <summary>
+        /// The prefix that makes the plugin not add formatting (new lines for positions) to it.
+        /// </summary>
+        public const string HintPrefixNoFormat = "ADVHINTSNF";
+
         private EventHandlers eventHandlers;
         private Harmony harmony;
 
