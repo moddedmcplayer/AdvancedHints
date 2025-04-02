@@ -13,7 +13,7 @@ jobs:
     - name: Get references
       shell: pwsh
       run: |
-        Invoke-WebRequest -Uri ${{ env.EXILED_REFERENCES_URL }} -OutFile References.zip
+        Invoke-WebRequest -Uri https://exmod-team.github.io/SL-References/Dev.zip -OutFile References.zip
         Expand-Archive -Path References.zip -DestinationPath References
 
     - name: Restore project
